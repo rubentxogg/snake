@@ -15,7 +15,7 @@ var appleY = 5;
 var xVelocity = 0;
 var yVelocity = 0;
 var score = 0;
-var gulpSound = new Audio("./assets/sounds/gulp.mp3");
+var gulpSound = new Audio("gulp.mp3");
 function drawGame() {
     clearScreen();
     changeSnakePosition();

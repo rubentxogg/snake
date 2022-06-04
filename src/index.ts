@@ -23,7 +23,7 @@ let yVelocity: number = 0;
 
 let score: number = 0;
 
-const gulpSound = new Audio("./assets/sounds/gulp.mp3"); 
+const gulpSound: HTMLAudioElement = new Audio("gulp.mp3"); 
 
 function drawGame(): void {
   clearScreen();
