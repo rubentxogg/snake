@@ -15,6 +15,7 @@ var appleY = 5;
 var xVelocity = 0;
 var yVelocity = 0;
 var score = 0;
+var gulpSound = new Audio("./assets/sounds/gulp.mp3");
 function drawGame() {
     clearScreen();
     changeSnakePosition();
@@ -29,13 +30,28 @@ function drawGame() {
 }
 function isGameOver() {
     var gameOver = false;
+    if (yVelocity === 0 && xVelocity === 0) {
+        return false;
+    }
     // Walls
-    if (headX < 0) {
+    if (headX < 0 || headY < 0 || headX === tileCount || headY === tileCount) {
         gameOver = true;
+    }
+    for (var _i = 0, snakeParts_1 = snakeParts; _i < snakeParts_1.length; _i++) {
+        var part = snakeParts_1[_i];
+        if (part.x === headX && part.y === headY) {
+            gameOver = true;
+            break;
+        }
     }
     if (gameOver) {
         ctx.fillStyle = "White";
         ctx.font = "50px Verdana";
+        var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop(0, "magenta");
+        gradient.addColorStop(0.5, "blue");
+        gradient.addColorStop(1.0, "red");
+        ctx.fillStyle = gradient;
         ctx.fillText("Game Over!", canvas.width / 6.5, canvas.height / 2);
     }
     return gameOver;
@@ -53,8 +69,8 @@ function drawSnake() {
     ctx.fillStyle = "orange";
     ctx.fillRect(headX * tileCount, headY * tileCount, tileSize, tileSize);
     ctx.fillStyle = "green";
-    for (var _i = 0, snakeParts_1 = snakeParts; _i < snakeParts_1.length; _i++) {
-        var part = snakeParts_1[_i];
+    for (var _i = 0, snakeParts_2 = snakeParts; _i < snakeParts_2.length; _i++) {
+        var part = snakeParts_2[_i];
         ctx.fillRect(part.x * tileCount, part.y * tileCount, tileSize, tileSize);
     }
     snakeParts.push(new SnakePart(headX, headY));
@@ -70,6 +86,8 @@ function checkAppleCollision() {
         appleY = Math.floor(Math.random() * tileCount);
         tailLength++;
         score++;
+        speed++;
+        gulpSound.play();
     }
 }
 function drawApple() {
@@ -80,7 +98,7 @@ function changeSnakePosition() {
     headX = headX + xVelocity;
     headY = headY + yVelocity;
 }
-document.addEventListener('keydown', keyDown);
+document.addEventListener("keydown", keyDown);
 function keyDown(event) {
     // Up
     if (event.keyCode === 38) {
